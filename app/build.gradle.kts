@@ -5,7 +5,7 @@ plugins {
 
 android {
   namespace = "com.aura"
-  compileSdk = 33
+  compileSdk = 34
 
   defaultConfig {
     applicationId = "com.aura"
@@ -36,6 +36,25 @@ android {
 }
 
 dependencies {
+
+
+
+  implementation ("androidx.fragment:fragment-ktx:1.6.2")
+
+
+
+implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
+
+  implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
+
+
+
+
+  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
+
+
+  implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+
 
   implementation ("com.squareup.retrofit2:retrofit:2.7.2")
   implementation ("com.squareup.retrofit2:converter-gson:2.5.0")
