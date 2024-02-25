@@ -1,5 +1,8 @@
 import android.widget.EditText
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.aura.connection.BankCall
+import kotlinx.coroutines.launch
 
 class LoginViewModel : ViewModel() {
 
@@ -7,9 +10,14 @@ class LoginViewModel : ViewModel() {
         { a: EditText, b: EditText -> a.text.trim().isNotEmpty() && b.text.trim().isNotEmpty() }
 
 
-//fun isEnabled(a: EditText, b:EditText):Boolean{
-    // return a.text.trim().isNotEmpty() && b.text.trim().isNotEmpty()
+    fun onLoginButtonClicked(userId: String, userPassword: String) {
+        viewModelScope.launch {
+             BankCall.fetchLogin(userId, userPassword)
 
+        }
+
+
+    }
 }
 
 

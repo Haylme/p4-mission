@@ -1,6 +1,10 @@
 plugins {
   id("com.android.application")
   id("org.jetbrains.kotlin.android")
+
+
+  kotlin("plugin.serialization") version "1.6.10"
+
 }
 
 android {
@@ -37,6 +41,12 @@ android {
 
 dependencies {
 
+
+
+
+  implementation ("ch.qos.logback:logback-classic:1.2.3")
+
+  implementation ("com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2")
 
 
   implementation ("androidx.fragment:fragment-ktx:1.6.2")

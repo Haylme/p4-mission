@@ -1,11 +1,10 @@
-package com.aura.model
+package com.aura.connection
 
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-
+import kotlinx.serialization.SerialName
 
 @Serializable
-data class Credentials(
+data class Pojo(
     @SerialName("id") val id: String,
     @SerialName("password") val password: String
 )
