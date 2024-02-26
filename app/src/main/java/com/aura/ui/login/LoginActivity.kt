@@ -107,6 +107,7 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
+
     private fun showError(message: String) {
 
         Toast.makeText(this, "error id or password", Toast.LENGTH_LONG).show()
