@@ -9,20 +9,18 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.aura.databinding.ActivityLoginBinding
 import com.aura.ui.home.HomeActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.lang.Exception
 
 /**
  * The login activity for the app.
  */
 class LoginActivity : AppCompatActivity() {
 
-
-    private fun showError(message: String) {
-        // Implementation to show error message to the user
-        // For example, using a Toast:
-        Toast.makeText(this, "error id or password", Toast.LENGTH_LONG).show()
-    }
 
     /**
      * The binding for the login layout.
@@ -45,6 +43,10 @@ class LoginActivity : AppCompatActivity() {
 
         val identifier = binding.identifier
         val password = binding.password
+
+
+        val id = identifier.text.toString()
+        val pass = password.text.toString()
 
 
         // Initially disable the login button
@@ -74,24 +76,49 @@ class LoginActivity : AppCompatActivity() {
 
         // Set the click listener for the login button
         login.setOnClickListener {
-            loading.visibility = View.VISIBLE
-            val id = identifier.text.toString()
-            val pass = password.text.toString()
+            try {
+                loading.visibility = View.VISIBLE
 
-            viewModel.login(id, pass) { response ->
-                loading.visibility = View.GONE
-                if (response.granted) {
-                    val intent = Intent(this@LoginActivity, HomeActivity::class.java)
-                    startActivity(intent)
-                    finish()
+
+                viewModel.checkLoginCredentials(id, pass)
+
+            } catch (e: Exception) {
+
+                Toast.makeText(this, "login impossible", Toast.LENGTH_LONG).show()
+            }
+
+        }
+
+
+
+
+        lifecycleScope.launch {
+            viewModel.loginEnabled.collect { isEnabled ->
+                val currentId = viewModel.id1.value
+                val currentPass = viewModel.pass1.value
+                val inputId = identifier.text.toString().trim()
+                val inputPass = password.text.toString().trim()
+
+                if (isEnabled && currentId == inputId && currentPass == inputPass) {
+                    navigateToHome()
                 } else {
-                    // Handle login failure
                     showError("Invalid ID or Password")
                 }
             }
-
-
-
         }
     }
+    private fun showError(message: String) {
+
+        Toast.makeText(this, "error id or password", Toast.LENGTH_LONG).show()
+    }
+
+
+    private fun navigateToHome() {
+        val intent = Intent(this@LoginActivity, HomeActivity::class.java)
+        startActivity(intent)
+        finish()
+
+    }
+
 }
+
