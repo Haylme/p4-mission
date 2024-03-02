@@ -45,12 +45,19 @@ class LoginActivity : AppCompatActivity() {
         val password = binding.password
 
 
-        val id = identifier.text.toString()
-        val pass = password.text.toString()
-
-
         // Initially disable the login button
         login.isEnabled = false
+
+
+        // Collect the loginEnabled StateFlow
+        lifecycleScope.launch {
+            viewModel.loginEnabled.collect { loginSuccessful ->
+                loading.visibility = View.GONE
+                if (loginSuccessful) {
+                    navigateToHome()
+                }
+            }
+        }
 
 
         // Define a common TextWatcher for both EditTexts
@@ -66,7 +73,10 @@ class LoginActivity : AppCompatActivity() {
 
             override fun afterTextChanged(s: Editable?) {
                 // Enable the login button only if both fields are not empty
-                login.isEnabled = viewModel.isEnabled(identifier, password)
+                login.isEnabled = viewModel.isEnabled(
+                    identifier.text.trim().toString(),
+                    password.text.trim().toString()
+                )
             }
         }
 
@@ -76,36 +86,26 @@ class LoginActivity : AppCompatActivity() {
 
         // Set the click listener for the login button
         login.setOnClickListener {
-            try {
-                loading.visibility = View.VISIBLE
+
+              try {
 
 
-                viewModel.checkLoginCredentials(id, pass)
+                  loading.visibility = View.VISIBLE
+                  val id = identifier.text.toString()
+                  val pass = password.text.toString()
 
-            } catch (e: Exception) {
+                  viewModel.checkLoginCredentials(id, pass)
 
-                Toast.makeText(this, "login impossible", Toast.LENGTH_LONG).show()
-            }
+              }  catch (e:Exception){
+
+
+                  showError("error id or password")
+              }
+
 
         }
 
 
-
-
-        lifecycleScope.launch {
-            viewModel.loginEnabled.collect { isEnabled ->
-                val currentId = viewModel.id1.value
-                val currentPass = viewModel.pass1.value
-                val inputId = identifier.text.toString().trim()
-                val inputPass = password.text.toString().trim()
-
-                if (isEnabled && currentId == inputId && currentPass == inputPass) {
-                    navigateToHome()
-                } else {
-                    showError("Invalid ID or Password")
-                }
-            }
-        }
     }
 
     private fun showError(message: String) {

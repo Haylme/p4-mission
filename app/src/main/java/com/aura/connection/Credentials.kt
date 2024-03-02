@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
 
 @Serializable
-data class Pojo(
+data class Credentials(
     @SerialName("id") val id: String,
     @SerialName("password") val password: String
 )

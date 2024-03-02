@@ -1,9 +1,8 @@
-import com.aura.connection.Pojo
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ResponseApi(
+data class CredentialsResult(
     @SerialName("granted") val granted: Boolean
 
 
