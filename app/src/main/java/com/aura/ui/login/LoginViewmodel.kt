@@ -1,4 +1,4 @@
-import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aura.connection.BankCall
@@ -14,11 +14,9 @@ class LoginViewModel : ViewModel() {
         { a: String, b: String -> a.isNotEmpty() && b.isNotEmpty() }
 
 
-
-
-
     private val _loginEnabled = MutableStateFlow(false)
     val loginEnabled: StateFlow<Boolean> = _loginEnabled.asStateFlow()
+
 
 
 
@@ -29,9 +27,14 @@ class LoginViewModel : ViewModel() {
                 val responseApi: CredentialsResult = BankCall.fetchLogin(id, password)
                 // Update _loginEnabled with the value of granted from the CredentialsResult
                 _loginEnabled.value = responseApi.granted
+
+
+
+
+
             } catch (e: Exception) {
                 // Handle any exceptions that might occur during the network request
-                _loginEnabled.value = false
+
 
             }
         }

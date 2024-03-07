@@ -12,7 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.aura.databinding.ActivityLoginBinding
 import com.aura.ui.home.HomeActivity
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.timeout
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
@@ -49,17 +50,6 @@ class LoginActivity : AppCompatActivity() {
         login.isEnabled = false
 
 
-        // Collect the loginEnabled StateFlow
-        lifecycleScope.launch {
-            viewModel.loginEnabled.collect { loginSuccessful ->
-                loading.visibility = View.GONE
-                if (loginSuccessful) {
-                    navigateToHome()
-                }
-            }
-        }
-
-
         // Define a common TextWatcher for both EditTexts
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -84,33 +74,62 @@ class LoginActivity : AppCompatActivity() {
         identifier.addTextChangedListener(textWatcher)
         password.addTextChangedListener(textWatcher)
 
+
         // Set the click listener for the login button
         login.setOnClickListener {
 
-              try {
+            try {
 
 
-                  loading.visibility = View.VISIBLE
-                  val id = identifier.text.toString()
-                  val pass = password.text.toString()
-
-                  viewModel.checkLoginCredentials(id, pass)
-
-              }  catch (e:Exception){
+                loading.visibility = View.VISIBLE
 
 
-                  showError("error id or password")
-              }
+                val id = identifier.text.toString()
+                val pass = password.text.toString()
 
+                viewModel.checkLoginCredentials(id, pass)
+
+                login.isEnabled = false
+
+
+            } catch (e: Exception) {
+
+
+                showError("error login")
+            }
+
+
+        }
+
+
+        // Collect the loginEnabled StateFlow
+        lifecycleScope.launch {
+            viewModel.loginEnabled.collect { loginSuccessful ->
+
+
+                if (loginSuccessful) {
+                    delay(2000)
+                    loading.visibility = View.GONE
+                    navigateToHome()
+
+
+                } else
+                    loading.visibility = View.GONE
+                login.isEnabled = true
+
+                showError("Error id or password")
+
+
+            }
 
         }
 
 
     }
 
-    private fun showError(message: String) {
+    private fun showError(message:String) {
 
-        Toast.makeText(this, "error id or password", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 
 

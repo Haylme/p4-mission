@@ -2,7 +2,6 @@ package com.aura.connection
 
 
 import CredentialsResult
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -12,7 +11,7 @@ import retrofit2.http.POST
 interface BankService {
     @POST("/login")
     suspend fun getLogin(
-        @Body loginRequest: LoginRequest
+        @Body credentials: Credentials
     ): Response<CredentialsResult>
 
     companion object {
@@ -26,12 +25,8 @@ interface BankService {
     }
 }
 
-data class LoginRequest(val id: String, val password: String)
 
 
 
-//http://127.0.0.1:8080  swagger ui endpoint
-
-//http://10.0.2.2:8080  local server url
 
 
