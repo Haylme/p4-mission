@@ -1,73 +1,34 @@
-package com.aura.connection
-
-import retrofit2.Response
-
 data class SimpleResponse<T>(
-
-
     val status: Status,
-
-    val data: Response<T>?,
-
-    val exeption: Exception?
-
-
+    val data: T? = null,
+    val exception: Exception? = null
 ) {
-
     sealed class Status {
-
-
         object Success : Status()
-
         object Failure : Status()
-
-
+        object Initial : Status() // Added to represent the initial state
     }
 
     companion object {
-
-
-        fun <T> success(data: Response<T>): SimpleResponse<T> {
-
-
-            return SimpleResponse(
-
-
-                status = Status.Success,
-                data = data,
-                exeption = null
-
-            )
-
+        fun <T> success(data: T): SimpleResponse<T> {
+            return SimpleResponse(status = Status.Success, data = data)
         }
 
-
-        fun <T> failure(exeption: Exception?): SimpleResponse<T> {
-
-            return SimpleResponse(
-
-                status = Status.Failure,
-                data = null,
-                exeption = exeption
-
-
-            )
-
-
+        fun <T> failure(exception: Exception?): SimpleResponse<T> {
+            return SimpleResponse(status = Status.Failure, exception = exception)
         }
 
-
+        fun <T> initial(): SimpleResponse<T> {
+            return SimpleResponse(status = Status.Initial)
+        }
     }
 
+    val isSuccessful: Boolean
+        get() = this.status == Status.Success
 
-    private val failed: Boolean
+    val isFailed: Boolean
         get() = this.status == Status.Failure
 
-    val successful: Boolean
-        get() = !failed && this.data?.isSuccessful == true
-
-    val body1: T
-        get() = this.data!!.body()!!
-
-
+    val isInitial: Boolean
+        get() = this.status == Status.Initial
 }

@@ -29,7 +29,7 @@ object BankCall {
             }
         }
     }
-    suspend fun <T> safeApiCall(apiCall: suspend () -> Response<T>): SimpleResponse<T> {
+   /** suspend fun <T> safeApiCall(apiCall: suspend () -> Response<T>): SimpleResponse<T> {
         return withContext(Dispatchers.IO) {
             try {
                 val response = apiCall()
@@ -42,7 +42,7 @@ object BankCall {
                 SimpleResponse.failure(e)
             }
         }
-    }
+    }**/
 
 
 }

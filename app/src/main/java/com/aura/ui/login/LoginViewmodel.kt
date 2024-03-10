@@ -1,4 +1,3 @@
-import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aura.connection.BankCall
@@ -14,33 +13,37 @@ class LoginViewModel : ViewModel() {
         { a: String, b: String -> a.isNotEmpty() && b.isNotEmpty() }
 
 
-    private val _loginEnabled = MutableStateFlow(false)
-    val loginEnabled: StateFlow<Boolean> = _loginEnabled.asStateFlow()
 
 
 
+    private val _loginEnabled = MutableStateFlow(SimpleResponse.initial<Boolean>())
+    val loginEnabled: StateFlow<SimpleResponse<Boolean>> = _loginEnabled.asStateFlow()
+
+
+    private val _toastEvent = MutableStateFlow<String?>(null)
+    val toastEvent: StateFlow<String?> = _toastEvent.asStateFlow()
 
     fun checkLoginCredentials(id: String, password: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                // Directly receive a CredentialsResult object from the fetchLogin call
+                // CredentialsResult object from the fetchLogin call
                 val responseApi: CredentialsResult = BankCall.fetchLogin(id, password)
                 // Update _loginEnabled with the value of granted from the CredentialsResult
-                _loginEnabled.value = responseApi.granted
-
-
-
-
+                _loginEnabled.value = SimpleResponse.success(responseApi.granted)
 
             } catch (e: Exception) {
-                // Handle any exceptions that might occur during the network request
 
+                _loginEnabled.value = SimpleResponse.failure(e)
+
+                _toastEvent.value = e.message
 
             }
         }
     }
 
-
+    fun resetToastEvent() {
+        _toastEvent.value = null
+    }
 
 
 }

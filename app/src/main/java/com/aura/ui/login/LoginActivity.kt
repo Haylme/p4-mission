@@ -95,41 +95,61 @@ class LoginActivity : AppCompatActivity() {
             } catch (e: Exception) {
 
 
-                showError("error login")
+                showError()
             }
 
 
         }
 
 
-        // Collect the loginEnabled StateFlow
+        // Collect the loginState StateFlow
         lifecycleScope.launch {
-            viewModel.loginEnabled.collect { loginSuccessful ->
+            viewModel.loginEnabled.collect { response ->
+                loading.visibility = View.GONE // Hide loading in any case
+
+                when (response.status) {
+                    is SimpleResponse.Status.Success -> {
+                        if (response.data == true) {
+                            navigateToHome()
+                        } else {
+                            // Handle the case where login is not successful
+                    showError()
+                }
+            }
+            is SimpleResponse.Status.Failure -> {
+                // Handle failure, show error message
+                showError()
+            }
+            else -> {
+                // Handle other cases, such as initial state
+            }
+        }
+
+        // Enable login button only if not in a success state
+        login.isEnabled = response.status !is SimpleResponse.Status.Success
+    }
+}
 
 
-                if (loginSuccessful) {
-                    delay(2000)
-                    loading.visibility = View.GONE
-                    navigateToHome()
+        lifecycleScope.launch {
 
-
-                } else
-                    loading.visibility = View.GONE
-                login.isEnabled = true
-
-                showError("Error id or password")
+            viewModel.toastEvent.collect { message ->
+                message?.let {
+                    Toast.makeText(this@LoginActivity, it, Toast.LENGTH_SHORT).show()
+                    // Reset the event after handling
+                    viewModel.resetToastEvent()
+                }
 
 
             }
-
         }
 
 
     }
 
-    private fun showError(message:String) {
+    private fun showError() {
 
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+        Toast.makeText(this, "Ivnvalid id or password", Toast.LENGTH_LONG).show()
     }
 
 
