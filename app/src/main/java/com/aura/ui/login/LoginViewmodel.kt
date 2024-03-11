@@ -13,9 +13,6 @@ class LoginViewModel : ViewModel() {
         { a: String, b: String -> a.isNotEmpty() && b.isNotEmpty() }
 
 
-
-
-
     private val _loginEnabled = MutableStateFlow(SimpleResponse.initial<Boolean>())
     val loginEnabled: StateFlow<SimpleResponse<Boolean>> = _loginEnabled.asStateFlow()
 
@@ -39,6 +36,11 @@ class LoginViewModel : ViewModel() {
 
             }
         }
+    }
+
+
+    fun resetLoginState() {
+        _loginEnabled.value = SimpleResponse.initial()
     }
 
     fun resetToastEvent() {

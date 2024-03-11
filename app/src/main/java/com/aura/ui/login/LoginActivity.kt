@@ -78,25 +78,16 @@ class LoginActivity : AppCompatActivity() {
         // Set the click listener for the login button
         login.setOnClickListener {
 
-            try {
+            viewModel.resetLoginState()
+            loading.visibility = View.VISIBLE
 
 
-                loading.visibility = View.VISIBLE
+            val id = identifier.text.toString()
+            val pass = password.text.toString()
 
+            viewModel.checkLoginCredentials(id, pass)
 
-                val id = identifier.text.toString()
-                val pass = password.text.toString()
-
-                viewModel.checkLoginCredentials(id, pass)
-
-                login.isEnabled = false
-
-
-            } catch (e: Exception) {
-
-
-                showError()
-            }
+            login.isEnabled = false
 
 
         }
@@ -105,30 +96,41 @@ class LoginActivity : AppCompatActivity() {
         // Collect the loginState StateFlow
         lifecycleScope.launch {
             viewModel.loginEnabled.collect { response ->
-                loading.visibility = View.GONE // Hide loading in any case
+                loading.visibility = View.GONE
 
                 when (response.status) {
                     is SimpleResponse.Status.Success -> {
                         if (response.data == true) {
                             navigateToHome()
                         } else {
-                            // Handle the case where login is not successful
-                    showError()
+
+                            showError()
+                            binding.identifier.setText("")
+                            binding.password.setText("")
+                            viewModel.resetToastEvent()
+                        }
+                    }
+
+                    is SimpleResponse.Status.Failure -> {
+                        // Handle failure, show error message
+                        showError()
+
+                        binding.identifier.setText("")
+                        binding.password.setText("")
+                        viewModel.resetToastEvent()
+
+                    }
+
+                    else -> {
+
+                        // Handle other cases, such as initial state
+                    }
                 }
-            }
-            is SimpleResponse.Status.Failure -> {
-                // Handle failure, show error message
-                showError()
-            }
-            else -> {
-                // Handle other cases, such as initial state
+
+                // Enable login button only if not in a success state
+                login.isEnabled = response.status !is SimpleResponse.Status.Success
             }
         }
-
-        // Enable login button only if not in a success state
-        login.isEnabled = response.status !is SimpleResponse.Status.Success
-    }
-}
 
 
         lifecycleScope.launch {
@@ -149,7 +151,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun showError() {
 
-        Toast.makeText(this, "Ivnvalid id or password", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, "Invalid id or password", Toast.LENGTH_LONG).show()
     }
 
 
