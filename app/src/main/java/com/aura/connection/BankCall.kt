@@ -34,12 +34,12 @@ object BankCall {
                 if (response.isSuccessful) {
                     response.body()
                 } else {
-                    null // Handle error as needed
+                    null
                 }
             } catch (e: HttpException) {
-                null // Handle error as needed
+                null
             } catch (e: Throwable) {
-                null // Handle error as needed
+                null 
             }
         }
     }

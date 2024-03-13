@@ -18,7 +18,8 @@ import java.io.IOException
 class LoginViewModel : ViewModel() {
 
     val isEnabled =
-        { a: String, b: String -> a.isNotEmpty() && b.isNotEmpty() }
+        { id: String, password: String -> id.isNotEmpty() && password.isNotEmpty() }
+
 
 
     private val _loginEnabled = MutableStateFlow(SimpleResponse.initial<Boolean>())

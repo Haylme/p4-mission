@@ -79,6 +79,7 @@ class LoginActivity : AppCompatActivity() {
         login.setOnClickListener {
 
             viewModel.resetLoginState()
+
             loading.visibility = View.VISIBLE
 
 
@@ -109,7 +110,8 @@ class LoginActivity : AppCompatActivity() {
 
                             viewModel.toastEvent.collect { message ->
                                 message?.let {
-                                    Toast.makeText(this@LoginActivity, it, Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(this@LoginActivity, it, Toast.LENGTH_SHORT)
+                                        .show()
                                     // Reset the event after handling
                                     viewModel.resetToastEvent()
                                 }
@@ -118,12 +120,12 @@ class LoginActivity : AppCompatActivity() {
                             }
                         }
 
-                       // showError()
+
                         binding.identifier.setText("")
                         binding.password.setText("")
                         viewModel.resetToastEvent()
                     }
-                    // The 'else' case can be removed if there are no other statuses to handle.
+
                     else -> {}
                 }
                 login.isEnabled = response.status !is SimpleResponse.Status.Success
@@ -131,15 +133,6 @@ class LoginActivity : AppCompatActivity() {
 
         }
 
-
-
-
-    }
-
-
-    private fun showError() {
-
-        Toast.makeText(this, "Invalid id or password", Toast.LENGTH_LONG).show()
     }
 
 
