@@ -103,7 +103,22 @@ class LoginActivity : AppCompatActivity() {
 
                     is SimpleResponse.Status.Failure -> {
                         loading.visibility = View.GONE
-                        showError()
+
+
+                        lifecycleScope.launch {
+
+                            viewModel.toastEvent.collect { message ->
+                                message?.let {
+                                    Toast.makeText(this@LoginActivity, it, Toast.LENGTH_SHORT).show()
+                                    // Reset the event after handling
+                                    viewModel.resetToastEvent()
+                                }
+
+
+                            }
+                        }
+
+                       // showError()
                         binding.identifier.setText("")
                         binding.password.setText("")
                         viewModel.resetToastEvent()
@@ -117,18 +132,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
 
-        lifecycleScope.launch {
 
-            viewModel.toastEvent.collect { message ->
-                message?.let {
-                    Toast.makeText(this@LoginActivity, it, Toast.LENGTH_SHORT).show()
-                    // Reset the event after handling
-                    viewModel.resetToastEvent()
-                }
-
-
-            }
-        }
 
     }
 
