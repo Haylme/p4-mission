@@ -93,43 +93,27 @@ class LoginActivity : AppCompatActivity() {
         }
 
 
-        // Collect the loginState StateFlow
         lifecycleScope.launch {
             viewModel.loginEnabled.collect { response ->
-                loading.visibility = View.GONE
-
                 when (response.status) {
                     is SimpleResponse.Status.Success -> {
-                        if (response.data == true) {
-                            navigateToHome()
-                        } else {
-
-                            showError()
-                            binding.identifier.setText("")
-                            binding.password.setText("")
-                            viewModel.resetToastEvent()
-                        }
+                        loading.visibility = View.GONE
+                        navigateToHome()
                     }
 
                     is SimpleResponse.Status.Failure -> {
-                        // Handle failure, show error message
+                        loading.visibility = View.GONE
                         showError()
-
                         binding.identifier.setText("")
                         binding.password.setText("")
                         viewModel.resetToastEvent()
-
                     }
-
-                    else -> {
-
-                        // Handle other cases, such as initial state
-                    }
+                    // The 'else' case can be removed if there are no other statuses to handle.
+                    else -> {}
                 }
-
-                // Enable login button only if not in a success state
                 login.isEnabled = response.status !is SimpleResponse.Status.Success
             }
+
         }
 
 
@@ -146,8 +130,8 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-
     }
+
 
     private fun showError() {
 
@@ -161,6 +145,5 @@ class LoginActivity : AppCompatActivity() {
         finish()
 
     }
-
 }
 

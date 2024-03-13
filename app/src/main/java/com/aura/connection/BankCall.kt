@@ -6,6 +6,7 @@ import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import retrofit2.Response
 
+
 object BankCall {
     suspend fun fetchLogin(id: String?, password: String?): CredentialsResult {
         val service: BankService = BankService.retrofit.create(BankService::class.java)
@@ -29,20 +30,28 @@ object BankCall {
             }
         }
     }
-   /** suspend fun <T> safeApiCall(apiCall: suspend () -> Response<T>): SimpleResponse<T> {
+
+
+    suspend fun fetchAccount(id: String, main:Boolean,balance:Double): Account? {
+        val service: BankService = BankService.retrofit.create(BankService::class.java)
         return withContext(Dispatchers.IO) {
             try {
-                val response = apiCall()
+                val accountLogin = Account(id,main,balance)
+                val response: Response<Account> = service.getAccount(accountLogin)
                 if (response.isSuccessful) {
-                    SimpleResponse.success(response)
+                    response.body()
                 } else {
-                    SimpleResponse.failure(HttpException(response))
+                    null // Handle error as needed
                 }
-            } catch (e: Exception) {
-                SimpleResponse.failure(e)
+            } catch (e: HttpException) {
+                null // Handle error as needed
+            } catch (e: Throwable) {
+                null // Handle error as needed
             }
         }
-    }**/
+    }
+
+
 
 
 }

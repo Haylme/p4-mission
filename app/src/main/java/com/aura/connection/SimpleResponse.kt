@@ -23,12 +23,12 @@ data class SimpleResponse<T>(
         }
     }
 
-    val isSuccessful: Boolean
-        get() = this.status == Status.Success
+    /** val isSuccessful: Boolean
+    get() = this.status == Status.Success
 
     val isFailed: Boolean
-        get() = this.status == Status.Failure
+    get() = this.status == Status.Failure
 
     val isInitial: Boolean
-        get() = this.status == Status.Initial
+    get() = this.status == Status.Initial**/
 }

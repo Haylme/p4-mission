@@ -25,8 +25,13 @@ class LoginViewModel : ViewModel() {
             try {
                 // CredentialsResult object from the fetchLogin call
                 val responseApi: CredentialsResult = BankCall.fetchLogin(id, password)
-                // Update _loginEnabled with the value of granted from the CredentialsResult
-                _loginEnabled.value = SimpleResponse.success(responseApi.granted)
+               if(responseApi.granted) {
+
+                   _loginEnabled.value = SimpleResponse.success(true)
+               }else {
+                   _loginEnabled.value =SimpleResponse.failure(Exception("Invalid id or password"))
+                   _toastEvent.value = "Invalid id or password"
+               }
 
             } catch (e: Exception) {
 

@@ -4,6 +4,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class CredentialsResult(
     @SerialName("granted") val granted: Boolean,
-    //val errorMessage: String? = null
+
 
 )
