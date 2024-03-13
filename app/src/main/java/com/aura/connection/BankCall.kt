@@ -39,7 +39,7 @@ object BankCall {
             } catch (e: HttpException) {
                 null
             } catch (e: Throwable) {
-                null 
+                null
             }
         }
     }
