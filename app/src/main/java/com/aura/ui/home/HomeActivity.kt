@@ -44,7 +44,7 @@ class HomeActivity : AppCompatActivity() {
         val balance = binding.balance
         val transfer = binding.transfer
 
-        //balance.text = "2654,54€"
+        
 
         transfer.setOnClickListener {
             startTransferActivityForResult.launch(
