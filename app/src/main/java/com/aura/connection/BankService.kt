@@ -20,9 +20,9 @@ interface BankService {
     @GET("/accounts/{id}")
 
     suspend fun getAccount (
-        @Path("id") accountId:Account
+        @Path("id") accountId: String
 
-    ):Response<Account>
+    ): Response<List<Account>>
 
 
 

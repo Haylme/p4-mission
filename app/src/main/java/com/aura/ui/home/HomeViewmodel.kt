@@ -1,5 +1,6 @@
 package com.aura.ui.home
 
+import android.widget.TextView
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aura.connection.Account
@@ -20,7 +21,7 @@ class HomeViewmodel: ViewModel() {
     fun fetchAccountDetails(id: String) {
         viewModelScope.launch {
             try {
-                val account: Account? = BankCall.fetchAccount(id, true, 0.0) // Use actual parameters as needed
+                val account: Account? = BankCall.fetchAccount(id) // Use actual parameters as needed
                 _accountDetails.value = account
             } catch (e: HttpException) {
                 // Handle HTTP errors

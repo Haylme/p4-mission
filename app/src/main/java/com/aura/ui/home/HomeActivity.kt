@@ -44,7 +44,7 @@ class HomeActivity : AppCompatActivity() {
         val balance = binding.balance
         val transfer = binding.transfer
 
-        balance.text = "2654,54€"
+        //balance.text = "2654,54€"
 
         transfer.setOnClickListener {
             startTransferActivityForResult.launch(
@@ -66,11 +66,14 @@ class HomeActivity : AppCompatActivity() {
         lifecycleScope.launch {
             viewmodel.accountDetails.collect { account ->
                 account?.let {
-                    binding.balance.text = "${it.balance}€"
+                    balance.text = "${it.balance}€"
+                } ?: run {
+                    // Handle the case where account is null (e.g., show error or default message)
+                    binding.balance.text = "Balance not available"
                 }
+
+
             }
-
-
         }
     }
 

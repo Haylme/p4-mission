@@ -1,10 +1,12 @@
 package com.aura.connection
 
 import CredentialsResult
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import retrofit2.Response
+import java.io.IOException
 
 
 object BankCall {
@@ -25,21 +27,30 @@ object BankCall {
     }
 
 
-    suspend fun fetchAccount(id: String, main: Boolean, balance: Double): Account? {
+    suspend fun fetchAccount(id: String): Account? {
         val service: BankService = BankService.retrofit.create(BankService::class.java)
         return withContext(Dispatchers.IO) {
             try {
-                val accountLogin = Account(id, main, balance)
-                val response: Response<Account> = service.getAccount(accountLogin)
+                val response: Response<List<Account>> = service.getAccount(id)
                 if (response.isSuccessful) {
-                    response.body()
+                    val accounts = response.body()
+                    if (!accounts.isNullOrEmpty()) {
+                        accounts[0] // Return the first account in the list or handle as needed
+                    } else {
+                        throw IllegalStateException("Received empty account list")
+                    }
                 } else {
-                    null
+                    throw HttpException(response)
                 }
             } catch (e: HttpException) {
-                null
+                Log.e("BankCall", "HttpException: ${e.response()?.errorBody()?.string()}", e)
+                throw e
+            } catch (e: IOException) {
+                Log.e("BankCall", "IOException: No network connection", e)
+                throw e
             } catch (e: Throwable) {
-                null
+                Log.e("BankCall", "Unknown error occurred", e)
+                throw e
             }
         }
     }

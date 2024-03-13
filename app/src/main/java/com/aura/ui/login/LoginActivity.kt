@@ -2,12 +2,14 @@ package com.aura.ui.login
 
 import LoginViewModel
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.aura.databinding.ActivityLoginBinding
@@ -31,6 +33,7 @@ class LoginActivity : AppCompatActivity() {
     private val viewModel: LoginViewModel by viewModels()
 
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -99,7 +102,8 @@ class LoginActivity : AppCompatActivity() {
                 when (response.status) {
                     is SimpleResponse.Status.Success -> {
                         loading.visibility = View.GONE
-                        navigateToHome()
+                        val id = identifier.text.toString()
+                        navigateToHome(id)
                     }
 
                     is SimpleResponse.Status.Failure -> {
@@ -136,8 +140,11 @@ class LoginActivity : AppCompatActivity() {
     }
 
 
-    private fun navigateToHome() {
-        val intent = Intent(this@LoginActivity, HomeActivity::class.java)
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private fun navigateToHome(userId:String) {
+        val intent = Intent(this@LoginActivity, HomeActivity::class.java).apply {
+            putExtra("USER_ID_KEY", userId)
+        }
         startActivity(intent)
         finish()
 
