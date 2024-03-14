@@ -44,7 +44,7 @@ class HomeActivity : AppCompatActivity() {
         val balance = binding.balance
         val transfer = binding.transfer
 
-        
+
 
         transfer.setOnClickListener {
             startTransferActivityForResult.launch(

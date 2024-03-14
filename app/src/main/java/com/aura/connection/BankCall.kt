@@ -27,34 +27,25 @@ object BankCall {
     }
 
 
-    suspend fun fetchAccount(id: String): Account? {
+    suspend fun fetchAccount(id: String): Account {
         val service: BankService = BankService.retrofit.create(BankService::class.java)
         return withContext(Dispatchers.IO) {
-            try {
-                val response: Response<List<Account>> = service.getAccount(id)
-                if (response.isSuccessful) {
-                    val accounts = response.body()
-                    if (!accounts.isNullOrEmpty()) {
-                        accounts[0] // Return the first account in the list or handle as needed
-                    } else {
-                        throw IllegalStateException("Received empty account list")
-                    }
+
+            val response: Response<List<Account>> = service.getAccount(id)
+            if (response.isSuccessful) {
+                val accounts = response.body()
+                if (!accounts.isNullOrEmpty()) {
+                    accounts[0]
                 } else {
-                    throw HttpException(response)
+                    throw IllegalStateException("Received empty account list")
                 }
-            } catch (e: HttpException) {
-                Log.e("BankCall", "HttpException: ${e.response()?.errorBody()?.string()}", e)
-                throw e
-            } catch (e: IOException) {
-                Log.e("BankCall", "IOException: No network connection", e)
-                throw e
-            } catch (e: Throwable) {
-                Log.e("BankCall", "Unknown error occurred", e)
-                throw e
+            } else {
+                throw HttpException(response)
             }
+
         }
+
+
     }
-
-
 }
 
