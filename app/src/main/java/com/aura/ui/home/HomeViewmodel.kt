@@ -12,7 +12,10 @@ import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
 
-class HomeViewmodel: ViewModel() {
+class HomeViewmodel : ViewModel() {
+
+    private val _errorsCollect = MutableStateFlow<String?>(null)
+    val errorsCollect: StateFlow<String?> = _errorsCollect.asStateFlow()
 
 
     private val _accountDetails = MutableStateFlow<Account?>(null)
@@ -21,14 +24,24 @@ class HomeViewmodel: ViewModel() {
     fun fetchAccountDetails(id: String) {
         viewModelScope.launch {
             try {
-                val account: Account? = BankCall.fetchAccount(id) // Use actual parameters as needed
+                val account: Account = BankCall.fetchAccount(id)
+
                 _accountDetails.value = account
             } catch (e: HttpException) {
-                // Handle HTTP errors
+                _errorsCollect.value = when (e.code()) {
+
+                    401 -> "Unauthorized access, check your credentials"
+                    403 -> "Forbidden access, you do not have permission"
+                    500 -> "Server error, please try again later"
+                    else -> "Server error: ${e.code()}"
+
+
+                }
             } catch (e: IOException) {
-                // Handle network connectivity errors
+               _errorsCollect.value = "No network connection"
             } catch (e: Exception) {
-                // Handle other exceptions
+
+                _errorsCollect.value = e.message?: "An unexpected error occurred"
             }
         }
     }

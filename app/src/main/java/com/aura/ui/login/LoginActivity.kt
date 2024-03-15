@@ -101,7 +101,7 @@ class LoginActivity : AppCompatActivity() {
             viewModel.loginEnabled.collect { response ->
                 when (response.status) {
                     is SimpleResponse.Status.Success -> {
-                        loading.visibility = View.GONE
+
                         val id = identifier.text.toString()
                         navigateToHome(id)
                     }
@@ -119,12 +119,8 @@ class LoginActivity : AppCompatActivity() {
                                     // Reset the event after handling
                                     viewModel.resetToastEvent()
                                 }
-
-
                             }
                         }
-
-
                         binding.identifier.setText("")
                         binding.password.setText("")
                         viewModel.resetToastEvent()
@@ -140,7 +136,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.Q)
+    //@RequiresApi(Build.VERSION_CODES.Q)
     private fun navigateToHome(userId:String) {
         val intent = Intent(this@LoginActivity, HomeActivity::class.java).apply {
             putExtra("USER_ID_KEY", userId)

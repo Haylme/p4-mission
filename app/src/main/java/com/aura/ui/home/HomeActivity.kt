@@ -56,19 +56,19 @@ class HomeActivity : AppCompatActivity() {
         }
 
 
-        // Assuming you have passed the user ID from LoginActivity to HomeActivity via intent
+
         val userId = intent.getStringExtra("USER_ID_KEY") ?: return
 
         // Fetch account details using the user ID
         viewmodel.fetchAccountDetails(userId)
 
-        // Observe the account details and update the UI
+
         lifecycleScope.launch {
             viewmodel.accountDetails.collect { account ->
                 account?.let {
                     balance.text = "${it.balance}€"
                 } ?: run {
-                    // Handle the case where account is null (e.g., show error or default message)
+                    // Handle the case where account is null 
                     binding.balance.text = "Balance not available"
                 }
 
