@@ -1,3 +1,5 @@
+import retrofit2.HttpException
+
 data class SimpleResponse<T>(
     val status: Status,
     val data: T? = null,
@@ -14,7 +16,7 @@ data class SimpleResponse<T>(
             return SimpleResponse(status = Status.Success, data = data)
         }
 
-        fun <T> failure(exception: Exception?): SimpleResponse<T> {
+        fun <T> failure(exception: Exception): SimpleResponse<T> {
             return SimpleResponse(status = Status.Failure, exception = exception)
         }
 

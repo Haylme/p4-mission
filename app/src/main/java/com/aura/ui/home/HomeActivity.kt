@@ -1,13 +1,17 @@
 package com.aura.ui.home
 
+import SimpleResponse
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.lifecycleScope
 import com.aura.R
 import com.aura.databinding.ActivityHomeBinding
@@ -44,6 +48,8 @@ class HomeActivity : AppCompatActivity() {
         val balance = binding.balance
         val transfer = binding.transfer
 
+        val retry = binding.retry
+
 
 
         transfer.setOnClickListener {
@@ -55,7 +61,7 @@ class HomeActivity : AppCompatActivity() {
             )
         }
 
-
+        retry.visibility = View.GONE
 
         val userId = intent.getStringExtra("USER_ID_KEY") ?: return
 
@@ -65,12 +71,43 @@ class HomeActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             viewmodel.accountDetails.collect { account ->
-                account?.let {
-                    balance.text = "${it.balance}€"
-                } ?: run {
-                    // Handle the case where account is null 
-                    binding.balance.text = "Balance not available"
+
+                when (account.status) {
+
+                    is SimpleResponse.Status.Success -> {
+
+                        account.let {
+                            balance.text = "${account.data?.balance}€"
+                        }
+
+                    }
+
+                    is SimpleResponse.Status.Failure -> {
+
+                        lifecycleScope.launch {
+
+                            viewmodel.errorsCollect.collect { message ->
+                                message?.let {
+                                    Toast.makeText(this@HomeActivity, it, Toast.LENGTH_SHORT)
+                                        .show()
+                                    // Reset the event after handling
+                                    viewmodel.resetToast()
+                                }
+                            }
+                        }
+
+
+                    }
+
+                    else -> {}
+
+
                 }
+
+                    ?: run {
+                        // Handle the case where account is null
+                        binding.balance.text = "Balance not available"
+                    }
 
 
             }
