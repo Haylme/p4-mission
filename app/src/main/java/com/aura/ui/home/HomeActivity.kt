@@ -60,6 +60,14 @@ class HomeActivity : AppCompatActivity() {
                 )
             )
         }
+        // Set up the click listener for the retry button
+        retry.setOnClickListener {
+            // Retry fetching account details
+            val userId = intent.getStringExtra("USER_ID_KEY") ?: return@setOnClickListener
+            viewmodel.fetchAccountDetails(userId)
+        }
+
+
 
         retry.visibility = View.GONE
 
@@ -92,6 +100,8 @@ class HomeActivity : AppCompatActivity() {
                                         .show()
                                     // Reset the event after handling
                                     viewmodel.resetToast()
+
+                                    retry.visibility = View.VISIBLE
                                 }
                             }
                         }
@@ -104,10 +114,6 @@ class HomeActivity : AppCompatActivity() {
 
                 }
 
-                    ?: run {
-                        // Handle the case where account is null
-                        binding.balance.text = "Balance not available"
-                    }
 
 
             }
