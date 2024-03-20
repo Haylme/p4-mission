@@ -16,7 +16,7 @@ import java.io.IOException
 class TransferViewmodel : ViewModel() {
 
 
-    val checkField = { recipient: String, amount: Int -> recipient.isNotEmpty() && amount > 0 }
+    val checkField = { recipient: String, amount: Double -> recipient.isNotEmpty() && amount > 0 }
 
     private val _transferCheck = MutableStateFlow(SimpleResponse.initial<Boolean>())
     val transferCheck: StateFlow<SimpleResponse<Boolean>> = _transferCheck.asStateFlow()

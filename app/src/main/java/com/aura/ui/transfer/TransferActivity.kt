@@ -62,8 +62,7 @@ class TransferActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {
                 val recipientText = recipient.text.trim().toString()
                 val amountText = amount.text.trim().toString()
-                val amountValue =
-                    amountText.toIntOrNull() ?: 0
+                val amountValue = amountText.toDoubleOrNull() ?: 0.0
 
                 transfer.isEnabled = viewModelTransfer.checkField(recipientText, amountValue)
 
