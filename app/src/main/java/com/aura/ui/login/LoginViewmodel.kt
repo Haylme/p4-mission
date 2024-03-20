@@ -1,6 +1,8 @@
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aura.connection.BankCall
+import com.aura.model.CredentialsResult
+import com.aura.model.SimpleResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

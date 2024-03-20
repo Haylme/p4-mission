@@ -13,11 +13,9 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.aura.databinding.ActivityLoginBinding
+import com.aura.model.SimpleResponse
 import com.aura.ui.home.HomeActivity
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.timeout
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
 /**
  * The login activity for the app.
@@ -108,6 +106,8 @@ class LoginActivity : AppCompatActivity() {
 
                     is SimpleResponse.Status.Failure -> {
                         loading.visibility = View.GONE
+
+                        login.isEnabled = true
 
 
                         lifecycleScope.launch {

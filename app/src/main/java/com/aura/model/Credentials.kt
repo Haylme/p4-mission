@@ -1,4 +1,4 @@
-package com.aura.connection
+package com.aura.model
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName

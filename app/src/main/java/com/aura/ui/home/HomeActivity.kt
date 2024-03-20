@@ -1,6 +1,6 @@
 package com.aura.ui.home
 
-import SimpleResponse
+import com.aura.model.SimpleResponse
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -11,7 +11,6 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.lifecycleScope
 import com.aura.R
 import com.aura.databinding.ActivityHomeBinding
@@ -51,27 +50,27 @@ class HomeActivity : AppCompatActivity() {
         val retry = binding.retry
 
 
+        val userId = intent.getStringExtra("USER_ID_KEY") ?: return
 
         transfer.setOnClickListener {
             startTransferActivityForResult.launch(
-                Intent(
-                    this@HomeActivity,
-                    TransferActivity::class.java
-                )
+                Intent(this@HomeActivity, TransferActivity::class.java).apply {
+                    putExtra("USER_ID_KEY", userId)
+                }
             )
         }
         // Set up the click listener for the retry button
         retry.setOnClickListener {
             // Retry fetching account details
-            val userId = intent.getStringExtra("USER_ID_KEY") ?: return@setOnClickListener
-            viewmodel.fetchAccountDetails(userId)
+            val id = intent.getStringExtra("USER_ID_KEY") ?: return@setOnClickListener
+            viewmodel.fetchAccountDetails(id)
         }
 
 
 
         retry.visibility = View.GONE
 
-        val userId = intent.getStringExtra("USER_ID_KEY") ?: return
+        // val userId = intent.getStringExtra("USER_ID_KEY") ?: return
 
         // Fetch account details using the user ID
         viewmodel.fetchAccountDetails(userId)
@@ -113,7 +112,6 @@ class HomeActivity : AppCompatActivity() {
 
 
                 }
-
 
 
             }

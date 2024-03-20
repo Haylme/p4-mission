@@ -1,7 +1,10 @@
 package com.aura.connection
 
 
-import CredentialsResult
+import com.aura.model.CredentialsResult
+import com.aura.model.Account
+import com.aura.model.Credentials
+import com.aura.model.TransferResult
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -24,6 +27,17 @@ interface BankService {
 
     ): Response<List<Account>>
 
+
+    @POST("/transfer")
+   suspend fun getTransfer(
+
+        @Body
+        sender:String,
+        transfer: String,
+        amount: Double
+
+
+    ):Response<TransferResult>
 
 
 

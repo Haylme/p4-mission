@@ -1,9 +1,9 @@
 package com.aura.ui.home
 
-import SimpleResponse
+import com.aura.model.SimpleResponse
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aura.connection.Account
+import com.aura.model.Account
 import com.aura.connection.BankCall
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

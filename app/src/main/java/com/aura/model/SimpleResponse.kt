@@ -1,4 +1,4 @@
-import retrofit2.HttpException
+package com.aura.model
 
 data class SimpleResponse<T>(
     val status: Status,
