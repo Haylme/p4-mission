@@ -114,7 +114,7 @@ class TransferActivity : AppCompatActivity() {
 
                         loading.visibility = View.GONE
 
-                        transfer.isEnabled = false
+
 
                         lifecycleScope.launch {
 
@@ -133,8 +133,10 @@ class TransferActivity : AppCompatActivity() {
 
                     }
 
-                }
+                    else -> {}
 
+                }
+                transfer.isEnabled = response.status !is SimpleResponse.Status.Success
 
             }
 

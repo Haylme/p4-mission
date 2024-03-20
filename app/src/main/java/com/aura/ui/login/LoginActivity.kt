@@ -107,7 +107,7 @@ class LoginActivity : AppCompatActivity() {
                     is SimpleResponse.Status.Failure -> {
                         loading.visibility = View.GONE
 
-                        login.isEnabled = true
+
 
 
                         lifecycleScope.launch {

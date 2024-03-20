@@ -67,6 +67,8 @@ class HomeActivity : AppCompatActivity() {
         }
 
 
+        val transferAmount = intent.getStringExtra("account_new_value") ?: return
+
 
         retry.visibility = View.GONE
 
@@ -82,11 +84,18 @@ class HomeActivity : AppCompatActivity() {
                 when (account.status) {
 
                     is SimpleResponse.Status.Success -> {
+                        // Parse the transfer amount or use null to indicate no transfer
+                        val transferAmountDouble = transferAmount.toDoubleOrNull()
 
-                        account.let {
-                            balance.text = "${account.data?.balance}€"
+                        // Calculate the new balance if a transfer occurred
+                        val newBalance = if (transferAmountDouble != null) {
+                            (account.data?.balance ?: 0.0) - transferAmountDouble
+                        } else {
+                            account.data?.balance ?: 0.0
                         }
 
+                        // Update the balance text
+                        balance.text = "${newBalance}€"
                     }
 
                     is SimpleResponse.Status.Failure -> {
@@ -105,7 +114,6 @@ class HomeActivity : AppCompatActivity() {
                             }
                         }
 
-
                     }
 
                     else -> {}
@@ -115,8 +123,11 @@ class HomeActivity : AppCompatActivity() {
 
 
             }
+
+
         }
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.home_menu, menu)
@@ -135,5 +146,6 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 }
+
 
 
