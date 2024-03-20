@@ -50,7 +50,12 @@ class HomeActivity : AppCompatActivity() {
         val retry = binding.retry
 
 
+        transfer.isEnabled = false
+
+
         val userId = intent.getStringExtra("USER_ID_KEY") ?: return
+
+        val transferAmount = intent.getDoubleExtra("account_new_value",0.0) ?: return
 
         transfer.setOnClickListener {
             startTransferActivityForResult.launch(
@@ -61,13 +66,15 @@ class HomeActivity : AppCompatActivity() {
         }
         // Set up the click listener for the retry button
         retry.setOnClickListener {
+            viewmodel.resetAccountValue()
+
             // Retry fetching account details
             val id = intent.getStringExtra("USER_ID_KEY") ?: return@setOnClickListener
             viewmodel.fetchAccountDetails(id)
         }
 
 
-        val transferAmount = intent.getStringExtra("account_new_value") ?: return
+
 
 
         retry.visibility = View.GONE
@@ -84,18 +91,15 @@ class HomeActivity : AppCompatActivity() {
                 when (account.status) {
 
                     is SimpleResponse.Status.Success -> {
-                        // Parse the transfer amount or use null to indicate no transfer
-                        val transferAmountDouble = transferAmount.toDoubleOrNull()
-
-                        // Calculate the new balance if a transfer occurred
-                        val newBalance = if (transferAmountDouble != null) {
-                            (account.data?.balance ?: 0.0) - transferAmountDouble
+                        val currentBalance = account.data?.balance ?: 0.0
+                        // Subtract the transfer amount only if it's greater than 0
+                        val newBalance = if (transferAmount > 0.0) {
+                            currentBalance - transferAmount
                         } else {
-                            account.data?.balance ?: 0.0
+                            currentBalance
                         }
-
-                        // Update the balance text
                         balance.text = "${newBalance}€"
+                        transfer.isEnabled = true
                     }
 
                     is SimpleResponse.Status.Failure -> {

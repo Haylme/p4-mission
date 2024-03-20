@@ -147,8 +147,9 @@ class TransferActivity : AppCompatActivity() {
     }
 
     private fun navigateToHome(newValue: String) {
+        val transferAmount = newValue.toDoubleOrNull() ?: 0.0
         val intent = Intent(this@TransferActivity, HomeActivity::class.java).apply {
-            putExtra("account_new_value", newValue)
+            putExtra("account_new_value", transferAmount)
         }
         startActivity(intent)
         finish()
