@@ -4,6 +4,7 @@ package com.aura.connection
 import com.aura.model.CredentialsResult
 import com.aura.model.Account
 import com.aura.model.Credentials
+import com.aura.model.Transfer
 import com.aura.model.TransferResult
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -29,15 +30,9 @@ interface BankService {
 
 
     @POST("/transfer")
-   suspend fun getTransfer(
-
-        @Body
-        sender:String,
-        transfer: String,
-        amount: Double
-
-
-    ):Response<TransferResult>
+    suspend fun getTransfer(
+        @Body transferRequest: Transfer
+    ): Response<TransferResult>
 
 
 

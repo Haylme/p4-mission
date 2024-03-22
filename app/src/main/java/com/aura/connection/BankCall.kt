@@ -3,6 +3,7 @@ package com.aura.connection
 import com.aura.model.CredentialsResult
 import com.aura.model.Account
 import com.aura.model.Credentials
+import com.aura.model.Transfer
 import com.aura.model.TransferResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -50,7 +51,9 @@ object BankCall {
     suspend fun fetchTransfer(sender:String , recipient: String, amount: Double): TransferResult {
         val service: BankService = BankService.retrofit.create(BankService::class.java)
         return withContext(Dispatchers.IO) {
-            val response: Response<TransferResult> = service.getTransfer(sender,recipient, amount)
+            val transferRequest = Transfer(sender, recipient, amount)
+            // Make the network request with the Transfer object
+            val response: Response<TransferResult> = service.getTransfer(transferRequest)
 
             if (response.isSuccessful) {
                 // Return the body of the response if it's successful

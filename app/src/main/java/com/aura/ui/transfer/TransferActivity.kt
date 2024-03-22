@@ -104,9 +104,9 @@ class TransferActivity : AppCompatActivity() {
                 when (response.status) {
 
                     is SimpleResponse.Status.Success -> {
-                        val newAmount = amount.text.trim().toString()
+                        //val newAmount = amount.text.trim().toString()
 
-                        navigateToHome(newAmount)
+                        navigateToHome()
                     }
 
                     is SimpleResponse.Status.Failure -> {
@@ -145,12 +145,12 @@ class TransferActivity : AppCompatActivity() {
 
     }
 
-    private fun navigateToHome(newValue: String) {
-        val transferAmount = newValue.toDoubleOrNull() ?: 0.0
+    private fun navigateToHome() {
+        /**val transferAmount = newValue.toDoubleOrNull() ?: 0.0
         val intent = Intent(this@TransferActivity, HomeActivity::class.java).apply {
             putExtra("account_new_value", transferAmount)
-        }
-        startActivity(intent)
+        }**/
+        //startActivity(intent)
         finish()
 
     }
