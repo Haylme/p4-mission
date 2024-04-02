@@ -31,11 +31,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         viewBinding = true
@@ -44,11 +44,7 @@ android {
 
 dependencies {
 
-    //implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
-
-
-    //implementation(" androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1 ")
 
 
     implementation("ch.qos.logback:logback-classic:1.2.3")
@@ -67,7 +63,7 @@ dependencies {
 
 
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
+
 
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
@@ -88,4 +84,14 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
+    testImplementation ("io.mockk:mockk:1.13.10")
+
+
+    testImplementation ("com.squareup.retrofit2:retrofit-mock:2.9.0")
+
+
+    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1-Beta")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1-Beta")
 }

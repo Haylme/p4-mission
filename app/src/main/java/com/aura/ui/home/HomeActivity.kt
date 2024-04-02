@@ -35,7 +35,7 @@ class HomeActivity : AppCompatActivity() {
      */
     private val startTransferActivityForResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-            //TODO
+
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,7 +55,7 @@ class HomeActivity : AppCompatActivity() {
 
         val userId = intent.getStringExtra("USER_ID_KEY") ?: return
 
-       // val transferAmount = intent.getDoubleExtra("account_new_value",0.0) ?: return
+        // val transferAmount = intent.getDoubleExtra("account_new_value",0.0) ?: return
 
         transfer.setOnClickListener {
             startTransferActivityForResult.launch(
@@ -94,9 +94,9 @@ class HomeActivity : AppCompatActivity() {
                         val currentBalance = account.data?.balance ?: 0.0
                         // Subtract the transfer amount only if it's greater than 0
                         //val newBalance = if (transferAmount > 0.0) {
-                           // currentBalance - transferAmount
+                        // currentBalance - transferAmount
 
-                            //currentBalance
+                        //currentBalance
 
                         balance.text = "${currentBalance}€"
                         transfer.isEnabled = true
@@ -154,16 +154,9 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        // Invalidate any existing data
-        viewmodel.resetAccountValue()
-        // Fetch fresh account details from the server
         val userId = intent.getStringExtra("USER_ID_KEY") ?: return
         viewmodel.fetchAccountDetails(userId)
     }
-
-
-
-
 
 }
 
