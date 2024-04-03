@@ -39,14 +39,14 @@ class TransferTest {
 
         coEvery { mockBankService.getTransfer(transferRequest) } returns Response.success(expectedResponse)
 
-        // Mock the BankCall object
+
         mockkObject(BankCall)
         coEvery { BankCall.fetchTransfer(sender, recipient, amount) } returns expectedResponse
 
-        // Act
+
         val result = BankCall.fetchTransfer(sender, recipient, amount)
 
-        // Assert
+
         assertEquals(expectedResponse, result)
 
     }
